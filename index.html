@@ -179,10 +179,11 @@
             white-space: nowrap;
         }
 
+        /* Adjusted baseline speed to be significantly slower */
         .news-ticker-content {
             display: inline-block;
             white-space: nowrap;
-            animation: ticker-loop 140s linear infinite;
+            animation: ticker-loop 260s linear infinite;
             font-size: 0.88rem;
             color: var(--text-color, #111);
         }
@@ -553,7 +554,7 @@
             return isNaN(d.getTime()) ? 0 : d.getTime();
         }
 
-        /* News & Magazine Ticker — Deterministic Most Recent First (No Jitter) */
+        /* News & Magazine Ticker — Deterministic Most Recent First (Slower Smooth Pace) */
         let isFetchingNews = false;
         async function fetchNewsHeadlines() {
             if (isFetchingNews) return;
@@ -669,10 +670,10 @@
                     }
                 });
 
-                // Strictly sort by newest first (descending timestamp) so most recent items are at the front
+                // Strictly sort by newest first (descending timestamp)
                 allArticles.sort((a, b) => b.timestamp - a.timestamp);
 
-                // Deduplicate across feeds while maintaining the newest-first order
+                // Deduplicate across feeds while maintaining newest-first order
                 const seenTitles = new Set();
                 const uniqueArticles = [];
 
@@ -693,7 +694,8 @@
                         tickerEl.setAttribute("data-content", stream);
                         tickerEl.textContent = stream + stream;
 
-                        const duration = Math.max(90, Math.round(uniqueArticles.length * 3.2));
+                        // Calibrated slower pace: 8.5 seconds per article, minimum 220s
+                        const duration = Math.max(220, Math.round(uniqueArticles.length * 8.5));
                         tickerEl.style.animationDuration = `${duration}s`;
                     }
                 }
