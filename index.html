@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sanayuk's dashboard</title>
+    <title>Countdown | sanayuk</title>
     <link rel="icon" type="image/jpeg" href="snypfp.jpg">
     <!-- Google Fonts: Lora -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,15 +12,31 @@
     <link rel="stylesheet" href="style.css?v=8">
     <style>
         * {
-            box-sizing: border-box;
             font-family: "Times New Roman", Times, serif;
         }
 
-        .container {
-            width: 100%;
-            max-width: 700px;
-            margin: 40px auto 30px auto;
-            padding: 0 14px;
+        /* Fixed Fullscreen Toggle Button */
+        .fullscreen-btn {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--link-bg, #ffffff);
+            border: 1px solid #ccc;
+            color: var(--text-color, #111);
+            padding: 5px 10px;
+            font-size: 0.78rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 3px;
+            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05);
+            transition: background 0.15s ease, border-color 0.15s ease;
+            z-index: 9999;
+        }
+
+        .fullscreen-btn:hover {
+            background: #f7f7f7;
+            border-color: #999;
         }
 
         /* Centered greeting in Lora */
@@ -34,14 +50,13 @@
             letter-spacing: -0.2px;
         }
 
-        /* Flat Dashboard Info Bar (Retains 2-side desktop split across all devices) */
+        /* Flat Dashboard Info Bar */
         .dashboard-info {
             display: flex;
-            flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: nowrap;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 16px;
             padding: 18px 22px;
             background: var(--link-bg, #ffffff);
             border: 1px solid #ccc;
@@ -55,7 +70,6 @@
             align-items: flex-start;
             text-align: left;
             gap: 3px;
-            flex-shrink: 0;
         }
 
         .live-date {
@@ -74,14 +88,11 @@
             text-align: left;
         }
 
-        /* Weather aligned to the right */
         .dashboard-weather {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            text-align: right;
             gap: 3px;
-            flex-shrink: 0;
         }
 
         .weather-location {
@@ -168,10 +179,11 @@
             white-space: nowrap;
         }
 
+        /* Adjusted baseline speed to be significantly slower */
         .news-ticker-content {
             display: inline-block;
             white-space: nowrap;
-            animation: ticker-loop 120s linear infinite;
+            animation: ticker-loop 260s linear infinite;
             font-size: 0.88rem;
             color: var(--text-color, #111);
         }
@@ -189,7 +201,7 @@
             }
         }
 
-        /* 2-Column Blocks (Preserved on all screen sizes) */
+        /* 2-Column Blocks */
         .dashboard-columns {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -241,6 +253,7 @@
             gap: 2px;
         }
 
+        /* Lowercase item titles only */
         .block-item-title {
             font-size: 0.95rem;
             color: var(--text-color, #111);
@@ -249,16 +262,19 @@
             text-transform: lowercase;
         }
 
+        /* Dates, times, calendar tags, All Day, and Due preserve case */
         .block-item-date {
             font-size: 0.8rem;
             color: #888;
         }
 
+        /* Soft red highlight for items happening/due today */
         .date-highlight-today {
             color: #d25a5a !important;
             font-weight: 600;
         }
 
+        /* Soft warm yellow highlight for items happening/due tomorrow */
         .date-highlight-tomorrow {
             color: #c98a12 !important;
             font-weight: 600;
@@ -270,7 +286,7 @@
             font-size: 0.9rem;
         }
 
-        /* 2-Column Countdown Grid (Preserved on all screen sizes) */
+        /* Countdown Grid */
         .countdown-feed {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -317,99 +333,44 @@
             font-size: 1rem;
         }
 
-        /* Fullscreen Toggle Button at Bottom of Page */
-        .fullscreen-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-            margin-bottom: 25px;
-        }
-
-        .fullscreen-btn {
-            background: var(--link-bg, #ffffff);
-            border: 1px solid #ccc;
-            color: var(--text-color, #111);
-            padding: 6px 14px;
-            font-size: 0.78rem;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 3px;
-            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05);
-            transition: background 0.15s ease, border-color 0.15s ease;
-        }
-
-        .fullscreen-btn:hover {
-            background: #f7f7f7;
-            border-color: #999;
-        }
-
-        /* Proportional Scaling for Mobile Devices */
+        /* Mobile layout */
         @media (max-width: 600px) {
-            .container {
-                margin-top: 28px !important;
-                padding: 0 10px;
+            .countdown-feed,
+            .dashboard-columns {
+                grid-template-columns: 1fr;
             }
             .dashboard-greeting {
-                font-size: 1.7rem;
-                margin-bottom: 14px;
+                font-size: 1.6rem;
             }
             .dashboard-info {
-                padding: 12px 14px;
-                gap: 6px;
+                flex-direction: column;
+                align-items: flex-start;
             }
-            .live-date,
-            .weather-location {
-                font-size: 0.75rem;
+            .dashboard-weather {
+                align-items: flex-start;
             }
-            .live-time,
-            .weather-temp {
-                font-size: 1.45rem;
-            }
-            .weather-stats {
-                gap: 8px;
-            }
-            .weather-condition,
-            .weather-humidity {
-                font-size: 0.78rem;
-            }
-            .dashboard-columns,
-            .countdown-feed {
-                gap: 10px;
-            }
-            .dashboard-block,
-            .countdown-card {
-                padding: 12px 12px;
-            }
-            .block-item-title {
-                font-size: 0.88rem;
-            }
-            .block-item-date {
-                font-size: 0.76rem;
-            }
-            .countdown-subject {
-                font-size: 0.95rem;
-            }
-            .countdown-date {
-                font-size: 0.78rem;
-            }
-            .countdown-timer {
-                font-size: 1.05rem;
+            .weather-sub {
+                align-items: flex-start;
             }
             .fullscreen-btn {
+                top: 10px;
+                right: 10px;
                 font-size: 0.72rem;
-                padding: 5px 12px;
+                padding: 4px 8px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <!-- Fullscreen Toggle Button -->
+    <button class="fullscreen-btn" id="fullscreen-toggle" onclick="toggleFullScreen()">Fullscreen</button>
+
+    <div class="container" style="max-width: 700px; margin-top: 40px;">
         <!-- Centered Greeting -->
         <div class="dashboard-greeting" id="dashboard-greeting">Hello, sny</div>
 
-        <!-- Live Clock (Left) and HK Weather (Right) -->
+        <!-- Live Clock and HK Weather -->
         <div class="dashboard-info">
             <div class="dashboard-clock">
                 <span class="live-date" id="live-date">...</span>
@@ -436,11 +397,11 @@
         <div class="news-ticker-container">
             <span class="news-ticker-label">News</span>
             <div class="news-ticker-track">
-                <span class="news-ticker-content" id="news-ticker-content">Syncing latest headlines...</span>
+                <span class="news-ticker-content" id="news-ticker-content">Loading 24h news and magazine feeds...</span>
             </div>
         </div>
 
-        <!-- Calendar & Tasks Sync Blocks (Side-by-Side 2 Columns) -->
+        <!-- Calendar & Tasks Sync Blocks -->
         <div class="dashboard-columns">
             <div class="dashboard-block">
                 <div class="block-header">
@@ -461,20 +422,15 @@
             </div>
         </div>
         
-        <!-- Countdown Grid (Side-by-Side 2 Columns) -->
         <div class="countdown-feed" id="countdown-container">
             <!-- Countdowns injected via JS -->
-        </div>
-
-        <!-- Fullscreen Button Placed at Bottom of Page -->
-        <div class="fullscreen-container">
-            <button class="fullscreen-btn" id="fullscreen-toggle" onclick="toggleFullScreen()">Fullscreen</button>
         </div>
     </div> 
 
     <script>
         /* Fullscreen Toggle Handler */
         function toggleFullScreen() {
+            const btn = document.getElementById("fullscreen-toggle");
             if (!document.fullscreenElement && !document.webkitFullscreenElement) {
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen();
@@ -539,7 +495,7 @@
             }
             document.getElementById("dashboard-greeting").textContent = `${greetingText}, sny`;
 
-            // Date format: Saturday, October 10, 2026
+            // Date format: Tuesday, January 10, 2026
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById("live-date").textContent = now.toLocaleDateString('en-US', dateOptions);
 
@@ -549,7 +505,7 @@
             const secondsStr = String(now.getSeconds()).padStart(2, '0');
             document.getElementById("live-time").textContent = `${hoursStr}:${minutesStr}:${secondsStr}`;
 
-            // Seconds remaining until tomorrow
+            // Seconds remaining until tomorrow (next midnight)
             const tomorrowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
             const secondsUntilTomorrow = Math.floor((tomorrowMidnight - now.getTime()) / 1000);
             const tomorrowSuffix = ` · ${secondsUntilTomorrow}s until tomorrow`;
@@ -598,172 +554,177 @@
             return isNaN(d.getTime()) ? 0 : d.getTime();
         }
 
-        /* News Ticker Rendering Engine (Strictly Newest First, Seamless Loop) */
-        let activeArticlesMap = new Map();
-
-        function renderTicker() {
-            const tickerEl = document.getElementById("news-ticker-content");
-            const allArticles = Array.from(activeArticlesMap.values());
-            if (allArticles.length === 0) return;
-
-            // Sort strictly newest first
-            allArticles.sort((a, b) => b.timestamp - a.timestamp);
-
-            const headlines = allArticles.map(item => `[${item.source}] ${item.title}`);
-            const stream = headlines.join("   —   ") + "   —   ";
-
-            if (tickerEl.getAttribute("data-content") !== stream) {
-                tickerEl.setAttribute("data-content", stream);
-                tickerEl.textContent = headlines.length >= 8 ? (stream + stream) : stream;
-
-                const duration = Math.max(75, Math.round(headlines.length * 3.5));
-                tickerEl.style.animationDuration = `${duration}s`;
-            }
-        }
-
-        /* Fetch single feed with 8s realistic timeout and cache-busting */
-        async function fetchFeedSafe(src) {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 8000);
-            const cacheBuster = Math.floor(Date.now() / 300000);
-
-            try {
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}&_cb=${cacheBuster}`, {
-                    signal: controller.signal
-                });
-                clearTimeout(timeoutId);
-                const data = await res.json();
-                if (data.status === "ok" && Array.isArray(data.items) && data.items.length > 0) {
-                    return data.items.map(item => ({
-                        source: src.name,
-                        title: item.title ? item.title.trim() : "",
-                        timestamp: parsePubDate(item.pubDate),
-                        isMagazine: !!src.isMagazine
-                    })).filter(item => item.title.length > 0);
-                }
-            } catch (err) {
-                // Silently skip failed feeds
-            }
-            return [];
-        }
-
-        /* Multi-Outlet News & Magazine Dataset */
-        const newsSources = [
-            // Hong Kong Independent & Civic Media
-            { name: "獨立媒體", url: "https://www.inmediahk.net/rss.xml" },
-            { name: "集誌社", url: "https://thecollectivehk.com/feed/" },
-            { name: "法庭線", url: "https://thewitnesshk.com/feed/" },
-            { name: "端傳媒", url: "https://theinitium.com/newsfeed/" },
-            { name: "ReNews", url: "https://news.google.com/rss/search?q=when:48h+ReNews+香港&hl=zh-HK&gl=HK&ceid=HK:zh-Hant" },
-            { name: "Pulse HK", url: "https://pulsehknews.com/feed/" },
-            { name: "棱角 The Points", url: "https://points-media.com/feed/" },
-            { name: "綠豆 Green Bean", url: "https://greenbean.media/feed/" },
-
-            // Hong Kong Mainstream Media
-            { name: "Now 新聞", url: "https://news.now.com/rss/news_local.xml" },
-            { name: "明報", url: "https://news.mingpao.com/rss/ins/all.xml" },
-            { name: "RTHK", url: "https://rthk9.rthk.hk/rthk/news/rss/c_expressnews.xml" },
-            { name: "HKET", url: "https://www.hket.com/rss/hongkong" },
-            { name: "信報 HKEJ", url: "https://www.hkej.com/rss/onlinenews.xml" },
-            { name: "The Standard", url: "https://www.thestandard.com.hk/newsfeed/latest/cms_express.xml" },
-            { name: "SCMP", url: "https://www.scmp.com/rss/91/feed" },
-            { name: "HKFP", url: "https://hongkongfp.com/feed/" },
-            { name: "Yahoo 新聞", url: "https://hk.news.yahoo.com/rss/hong-kong" },
-
-            // Taiwan Regional & Investigative Media
-            { name: "中央社 CNA", url: "https://feeds.feedburner.com/cnaFirstNews" },
-            { name: "公視 PTS", url: "https://news.pts.org.tw/xml/newsfeed.xml" },
-            { name: "報導者", url: "https://www.twreporter.org/a/rss2.xml" },
-            { name: "ETtoday", url: "https://feeds.feedburner.com/ettoday/realtime" },
-            { name: "Taipei Times", url: "https://www.taipeitimes.com/xml/index.rss" },
-
-            // Tech & Gadgets
-            { name: "The Verge", url: "https://www.theverge.com/rss/index.xml" },
-            { name: "WIRED", url: "https://www.wired.com/feed/rss" },
-            { name: "unwire.hk", url: "https://unwire.hk/feed/" },
-            { name: "DCFever", url: "https://www.dcfever.com/news/rss.php" },
-
-            // Magazines, Fashion, Menswear & Street Style (isMagazine: allows 72h / latest fallback)
-            { name: "Vogue HK", url: "https://www.voguehk.com/zh/feed/", isMagazine: true },
-            { name: "ELLE HK", url: "https://www.elle.com.hk/rss", isMagazine: true },
-            { name: "Harper's BAZAAR HK", url: "https://www.harpersbazaar.com.hk/rss", isMagazine: true },
-            { name: "Cosmopolitan HK", url: "https://www.cosmopolitan.com.hk/rss", isMagazine: true },
-            { name: "Marie Claire HK", url: "https://marieclaire.com.hk/feed/", isMagazine: true },
-            { name: "Hypebeast HK", url: "https://hypebeast.com/hk/feed", isMagazine: true },
-            { name: "Esquire HK", url: "https://www.esquirehk.com/rss", isMagazine: true },
-            { name: "Vogue Taiwan", url: "https://www.vogue.com.tw/feed", isMagazine: true },
-            { name: "ELLE Taiwan", url: "https://www.elle.com/tw/rss/all.xml", isMagazine: true },
-            { name: "Harper's BAZAAR TW", url: "https://www.harpersbazaar.com/tw/rss/all.xml", isMagazine: true },
-            { name: "Marie Claire Taiwan", url: "https://www.marieclaire.com.tw/feed", isMagazine: true },
-            { name: "GQ Taiwan", url: "https://www.gq.com.tw/feed", isMagazine: true },
-            { name: "JUKSY 街星", url: "https://www.juksy.com/rss.xml", isMagazine: true },
-            { name: "HEAVEN RAVEN", url: "https://heavenraven.com/feed/", isMagazine: true },
-            { name: "Vogue Business", url: "https://www.voguebusiness.com/feed", isMagazine: true },
-            { name: "GQ", url: "https://www.gq.com/feed/rss", isMagazine: true },
-            { name: "Esquire", url: "https://www.esquire.com/rss/all.xml", isMagazine: true },
-            { name: "Hypebeast", url: "https://hypebeast.com/feed", isMagazine: true },
-            { name: "TIME", url: "https://time.com/feed/", isMagazine: true },
-            { name: "The New Yorker", url: "https://www.newyorker.com/feed/everything", isMagazine: true },
-            { name: "The Atlantic", url: "https://www.theatlantic.com/feed/all/", isMagazine: true },
-            { name: "Fortune", url: "https://fortune.com/feed/", isMagazine: true },
-
-            // Global Wires & Financial Press
-            { name: "BBC", url: "https://feeds.bbci.co.uk/news/world/rss.xml" },
-            { name: "The Guardian", url: "https://www.theguardian.com/world/rss" },
-            { name: "NYT", url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml" },
-            { name: "Financial Times", url: "https://www.ft.com/world?format=rss" },
-            { name: "Nikkei Asia", url: "https://asia.nikkei.com/rss/Feed/NAR/asia" },
-            { name: "Euronews", url: "https://www.euronews.com/rss?format=mrss&level=vertical&name=news" },
-            { name: "CBC", url: "https://www.cbc.ca/cmlink/rss-world" },
-            { name: "RFA", url: "https://www.rfa.org/english/RSS" }
-        ];
-
-        /* Ingest News progressively in controlled batches */
+        /* News & Magazine Ticker — Deterministic Most Recent First (Slower Smooth Pace) */
         let isFetchingNews = false;
-        async function fetchAllNews() {
+        async function fetchNewsHeadlines() {
             if (isFetchingNews) return;
             isFetchingNews = true;
 
+            const tickerEl = document.getElementById("news-ticker-content");
+
+            const sources = [
+                // Tech & Gadgets (Hong Kong & Global)
+                { name: "The Verge", url: "https://www.theverge.com/rss/index.xml" },
+                { name: "WIRED", url: "https://www.wired.com/feed/rss" },
+                { name: "unwire.hk", url: "https://unwire.hk/feed/" },
+                { name: "DCFever", url: "https://www.dcfever.com/news/rss.php" },
+
+                // Fashion, Menswear & Street Style (Hong Kong)
+                { name: "Vogue HK", url: "https://www.voguehk.com/zh/feed/" },
+                { name: "ELLE HK", url: "https://www.elle.com.hk/rss" },
+                { name: "Harper's BAZAAR HK", url: "https://www.harpersbazaar.com.hk/rss" },
+                { name: "Cosmopolitan HK", url: "https://www.cosmopolitan.com.hk/rss" },
+                { name: "Marie Claire HK", url: "https://marieclaire.com.hk/feed/" },
+                { name: "Hypebeast HK", url: "https://hypebeast.com/hk/feed" },
+                { name: "Esquire HK", url: "https://www.esquirehk.com/rss" },
+                { name: "Milk Magazine", url: "https://news.google.com/rss/search?q=when:24h+source:Milk+Magazine&hl=zh-HK&gl=HK&ceid=HK:zh-Hant" },
+
+                // Taiwan Fashion, Street Style & Menswear
+                { name: "Vogue Taiwan", url: "https://www.vogue.com.tw/feed" },
+                { name: "ELLE Taiwan", url: "https://www.elle.com/tw/rss/all.xml" },
+                { name: "Harper's BAZAAR TW", url: "https://www.harpersbazaar.com/tw/rss/all.xml" },
+                { name: "Marie Claire Taiwan", url: "https://www.marieclaire.com.tw/feed" },
+                { name: "GQ Taiwan", url: "https://www.gq.com.tw/feed" },
+                { name: "JUKSY 街星", url: "https://www.juksy.com/rss.xml" },
+                { name: "HEAVEN RAVEN", url: "https://heavenraven.com/feed/" },
+
+                // International Magazines, Fashion Industry & Menswear
+                { name: "Vogue Business", url: "https://www.voguebusiness.com/feed" },
+                { name: "GQ", url: "https://www.gq.com/feed/rss" },
+                { name: "Esquire", url: "https://www.esquire.com/rss/all.xml" },
+                { name: "Hypebeast", url: "https://hypebeast.com/feed" },
+                { name: "TIME", url: "https://time.com/feed/" },
+                { name: "The New Yorker", url: "https://www.newyorker.com/feed/everything" },
+                { name: "The Atlantic", url: "https://www.theatlantic.com/feed/all/" },
+                { name: "Businessweek", url: "https://news.google.com/rss/search?q=when:24h+source:Bloomberg+Businessweek&ceid=US:en&hl=en-US&gl=US" },
+                { name: "Forbes", url: "https://news.google.com/rss/search?q=when:24h+source:Forbes&ceid=US:en&hl=en-US&gl=US" },
+                { name: "Fortune", url: "https://fortune.com/feed/" },
+
+                // Hong Kong Media
+                { name: "Now 新聞", url: "https://news.now.com/rss/news_local.xml" },
+                { name: "RTHK", url: "https://rthk9.rthk.hk/rthk/news/rss/c_expressnews.xml" },
+                { name: "明報", url: "https://news.mingpao.com/rss/ins/all.xml" },
+                { name: "HKET", url: "https://www.hket.com/rss/hongkong" },
+                { name: "信報 HKEJ", url: "https://www.hkej.com/rss/onlinenews.xml" },
+                { name: "HK01", url: "https://news.google.com/rss/search?q=when:24h+source:香港01&hl=zh-HK&gl=HK&ceid=HK:zh-Hant" },
+                { name: "TVB", url: "https://news.google.com/rss/search?q=when:24h+source:無綫新聞&hl=zh-HK&gl=HK&ceid=HK:zh-Hant" },
+                { name: "The Standard", url: "https://www.thestandard.com.hk/newsfeed/latest/cms_express.xml" },
+                { name: "SCMP", url: "https://www.scmp.com/rss/91/feed" },
+                { name: "HKFP", url: "https://hongkongfp.com/feed/" },
+
+                // Taiwan News & Investigative Media
+                { name: "中央社 CNA", url: "https://feeds.feedburner.com/cnaFirstNews" },
+                { name: "公視 PTS", url: "https://news.pts.org.tw/xml/newsfeed.xml" },
+                { name: "報導者", url: "https://www.twreporter.org/a/rss2.xml" },
+                { name: "ETtoday", url: "https://feeds.feedburner.com/ettoday/realtime" },
+                { name: "TVBS", url: "https://news.google.com/rss/search?q=when:24h+source:TVBS&hl=zh-TW&gl=TW&ceid=TW:zh-Hant" },
+                { name: "三立 SETN", url: "https://news.google.com/rss/search?q=when:24h+source:三立新聞網&hl=zh-TW&gl=TW&ceid=TW:zh-Hant" },
+                { name: "民視 FTV", url: "https://news.google.com/rss/search?q=when:24h+source:民視新聞網&hl=zh-TW&gl=TW&ceid=TW:zh-Hant" },
+                { name: "東森 EBC", url: "https://news.google.com/rss/search?q=when:24h+source:東森新聞&hl=zh-TW&gl=TW&ceid=TW:zh-Hant" },
+                { name: "Taipei Times", url: "https://www.taipeitimes.com/xml/index.rss" },
+
+                // International Wires & Global Broadcasters
+                { name: "Bloomberg", url: "https://news.google.com/rss/search?q=when:24h+source:Bloomberg&ceid=US:en&hl=en-US&gl=US" },
+                { name: "Nikkei Asia", url: "https://asia.nikkei.com/rss/Feed/NAR/asia" },
+                { name: "朝日新聞", url: "https://www.asahi.com/rss/asahi/newsheadlines.rdf" },
+                { name: "Reuters", url: "https://news.google.com/rss/search?q=when:24h+source:Reuters&ceid=US:en&hl=en-US&gl=US" },
+                { name: "AP News", url: "https://news.google.com/rss/search?q=when:24h+source:Associated+Press&ceid=US:en&hl=en-US&gl=US" },
+                { name: "BBC", url: "https://feeds.bbci.co.uk/news/world/rss.xml" },
+                { name: "The Guardian", url: "https://www.theguardian.com/world/rss" },
+                { name: "NYT", url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml" },
+                { name: "Financial Times", url: "https://www.ft.com/world?format=rss" },
+                { name: "RFA", url: "https://www.rfa.org/english/RSS" }
+            ];
+
             const nowTime = Date.now();
             const twentyFourHoursAgo = nowTime - (24 * 60 * 60 * 1000);
-            const seventyTwoHoursAgo = nowTime - (72 * 60 * 60 * 1000);
 
-            for (let i = 0; i < newsSources.length; i += 4) {
-                const batch = newsSources.slice(i, i + 4);
-                const results = await Promise.allSettled(batch.map(src => fetchFeedSafe(src)));
-
-                results.forEach((res, idx) => {
-                    if (res.status === "fulfilled" && Array.isArray(res.value) && res.value.length > 0) {
-                        const src = batch[idx];
-                        
-                        let valid = res.value.filter(item => {
-                            if (item.timestamp === 0) return true;
-                            if (item.isMagazine) return item.timestamp >= seventyTwoHoursAgo;
-                            return item.timestamp >= twentyFourHoursAgo;
-                        });
-
-                        if (valid.length === 0 && src.isMagazine) {
-                            valid = res.value.slice(0, 2);
-                        }
-
-                        valid.forEach(item => {
-                            const normKey = item.title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, "").slice(0, 32);
-                            if (normKey.length > 4 && !activeArticlesMap.has(normKey)) {
-                                activeArticlesMap.set(normKey, item);
+            try {
+                const fetchPromises = sources.map(src =>
+                    fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === "ok" && data.items && data.items.length > 0) {
+                                return data.items
+                                    .filter(item => {
+                                        const pubTimestamp = parsePubDate(item.pubDate);
+                                        return pubTimestamp !== 0 ? pubTimestamp >= twentyFourHoursAgo : true;
+                                    })
+                                    .map(item => ({
+                                        source: src.name,
+                                        title: item.title.trim(),
+                                        timestamp: parsePubDate(item.pubDate) || 0
+                                    }));
                             }
-                        });
+                            return [];
+                        })
+                        .catch(() => [])
+                );
+
+                const results = await Promise.allSettled(fetchPromises);
+                let allArticles = [];
+
+                results.forEach(res => {
+                    if (res.status === "fulfilled" && Array.isArray(res.value)) {
+                        allArticles = allArticles.concat(res.value);
                     }
                 });
 
-                renderTicker();
-            }
+                // Strictly sort by newest first (descending timestamp)
+                allArticles.sort((a, b) => b.timestamp - a.timestamp);
 
-            isFetchingNews = false;
+                // Deduplicate across feeds while maintaining newest-first order
+                const seenTitles = new Set();
+                const uniqueArticles = [];
+
+                allArticles.forEach(item => {
+                    const normalized = item.title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, "");
+                    if (normalized && !seenTitles.has(normalized)) {
+                        seenTitles.add(normalized);
+                        uniqueArticles.push(item);
+                    }
+                });
+
+                if (uniqueArticles.length > 0) {
+                    const headlines = uniqueArticles.map(item => `[${item.source}] ${item.title}`);
+                    const stream = headlines.join("   —   ") + "   —   ";
+
+                    // Update DOM ONLY when content actually updates, preventing animation jumps
+                    if (tickerEl.getAttribute("data-content") !== stream) {
+                        tickerEl.setAttribute("data-content", stream);
+                        tickerEl.textContent = stream + stream;
+
+                        // Calibrated slower pace: 8.5 seconds per article, minimum 220s
+                        const duration = Math.max(220, Math.round(uniqueArticles.length * 8.5));
+                        tickerEl.style.animationDuration = `${duration}s`;
+                    }
+                }
+            } catch (err) {
+                if (!tickerEl.getAttribute("data-content")) {
+                    const fallbackArticles = [
+                        "[The Verge] Top technology breakthroughs, gadget teardowns, and digital media",
+                        "[WIRED] The latest in AI research, cybersecurity, and future technology",
+                        "[unwire.hk] 香港科技生活情報、數碼周邊實測與熱話",
+                        "[DCFever] 最新數碼相機、鏡頭測試與科技新品速報",
+                        "[Vogue Taiwan] 臺北時裝週焦點、設計師特寫與金馬金鐘紅毯時尚",
+                        "[GQ Taiwan] 經典紳裝風格、戶外工裝與生活風格提案",
+                        "[JUKSY 街星] 流行球鞋速報、街頭潮流與當代青年文化",
+                        "[Hypebeast HK] 街頭潮流、藝術聯乘與流行文化精選",
+                        "[Vogue Business] Global luxury market analysis and sustainability insights",
+                        "[Now 新聞] 本港最新即時新聞及社會焦點動態",
+                        "[明報] 即時港聞及國際深度專題報道"
+                    ];
+                    const stream = fallbackArticles.join("   —   ") + "   —   ";
+                    tickerEl.textContent = stream + stream;
+                }
+            } finally {
+                isFetchingNews = false;
+            }
         }
 
-        // Fetch on load, poll in background every 3 minutes
-        fetchAllNews();
-        setInterval(fetchAllNews, 180000);
+        // Fetch immediately and poll every 1 second
+        fetchNewsHeadlines();
+        setInterval(fetchNewsHeadlines, 1000);
 
         /* HK Weather */
         const hkoWeatherIcons = {
@@ -880,7 +841,7 @@
             return "";
         }
 
-        /* Automatic Backend Fetching (Calendar & Tasks Every 1 Second) */
+        /* Automatic Backend Fetching (Every 1 Second) */
         let isFetching = false;
         async function fetchLiveDashboardData() {
             if (isFetching) return;
@@ -890,7 +851,7 @@
                 const response = await fetch(apiEndpoint);
                 const liveData = await response.json();
                 
-                // Calendar List: lowercases title, capitalises "All Day", preserves other cases
+                // Calendar List: lowercases item title; capitalises "All Day"; preserves date, time, and calendar casing
                 const calList = document.getElementById("calendar-list");
                 calList.innerHTML = "";
                 if (liveData.events && liveData.events.length > 0) {
@@ -898,6 +859,7 @@
                         const titleLower = String(evt.title || "").toLowerCase();
                         let dateDisplay = String(evt.date || "");
                         
+                        // Capitalise "All Day"
                         dateDisplay = dateDisplay.replace(/all day/gi, "All Day");
 
                         if (evt.calendar) {
@@ -915,7 +877,7 @@
                     calList.innerHTML = `<li class="empty-state">No upcoming events</li>`;
                 }
 
-                // Tasks List: lowercases title, capitalises "Due", preserves other cases
+                // Tasks List: lowercases item title; capitalises "Due"; preserves date casing
                 const tskList = document.getElementById("tasks-list");
                 tskList.innerHTML = "";
                 if (liveData.tasks && liveData.tasks.length > 0) {
@@ -923,6 +885,7 @@
                         const titleLower = String(task.title || "").toLowerCase();
                         let dateDisplay = String(task.date || "No due date");
                         
+                        // Capitalise "Due"
                         dateDisplay = dateDisplay.replace(/\bdue\b/gi, "Due");
 
                         const highlight = getDateHighlightClass(task.date);
@@ -943,6 +906,7 @@
             }
         }
 
+        // Fetch on load, update every 1 second
         fetchLiveDashboardData();
         setInterval(fetchLiveDashboardData, 1000);
 
