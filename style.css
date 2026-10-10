@@ -1,0 +1,293 @@
+/* --- 1. Variables & Global Styles --- */
+:root {
+    --bg-color: #f4f7f6;
+    --text-color: #333;
+    --accent-color: #2d3436;
+    --link-bg: #ffffff;
+    --link-hover: #f0f0f0;
+}
+
+body {
+    font-family: "Times New Roman", Times, serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* Takes full window height */
+    margin: 0;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* --- 2. Layout Containers --- */
+.container {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-sizing: border-box;
+    /* Automatically pushes content directly to the vertical center between header and footer */
+    margin-top: auto;
+    margin-bottom: auto; 
+    padding: 20px 0;
+}
+
+/* --- 3. Typography & Headers --- */
+h1, h2, h3 {
+    font-weight: normal;
+    margin: 0;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+h3 {
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+p {
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+}
+
+/* --- 4. Top Header (Aligned with Footer) --- */
+.top-header {
+    width: 100%;
+    max-width: 900px; /* Matches the exact width boundary of your footer */
+    padding: 40px 0px; /* 0px horizontal padding lines it up pixel-perfect with the footer text edges */
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Forces link states to stay black, removing blue or purple browser styles */
+.header-left,
+.header-left:link,
+.header-left:visited,
+.header-left:active {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: #000000 !important;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.header-left:hover {
+    opacity: 0.6;
+}
+
+.header-pfp {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
+
+.header-name {
+    font-size: 1rem;
+}
+
+.header-link,
+.header-link:link,
+.header-link:visited,
+.header-link:active {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: opacity 0.2s;
+}
+
+.header-link:hover {
+    opacity: 0.6;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* --- 5. Profile & Link Cards --- */
+.profile-pic {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-bottom: 16px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.link-card {
+    background-color: var(--link-bg);
+    color: var(--text-color);
+    padding: 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+    border: 1px solid #ccc;
+    display: block;
+}
+
+.link-card:hover {
+    background-color: var(--link-hover);
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+}
+
+/* --- 6. New Footer Layout --- */
+.site-footer {
+    padding-top: 20px;
+    padding-bottom: 40px; /* Balanced padding inside the window bottom edge */
+    border-top: 1px solid #333;
+    width: 100%;
+    max-width: 900px; /* Same max-width configuration as the header */
+    text-align: left !important; 
+    box-sizing: border-box;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.footer-left {
+    text-align: left !important;
+}
+
+.footer-right {
+    text-align: right !important;
+}
+
+.footer-heading {
+    font-size: 0.95rem;
+    color: #000000 !important; 
+    margin-bottom: 8px;
+    font-weight: bold; 
+}
+
+.footer-link, .footer-socials a {
+    color: #000000 !important; 
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+}
+
+.footer-link:hover, .footer-socials a:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    color: #000000; 
+    justify-content: flex-end; 
+}
+
+.footer-bottom {
+    font-size: 0.8rem;
+    color: #000000 !important; 
+    display: flex;
+    justify-content: flex-start; 
+    border-top: 1px solid #222;
+    padding-top: 15px;
+}
+
+/* --- 7. Mobile Adjustments --- */
+@media (max-width: 600px) {
+    .top-header {
+        width: 100%;
+        padding: 20px 10px;
+    }
+
+    .header-name {
+        display: none; /* Keeps it clean on small screens */
+    }
+
+    .container {
+        max-width: 90%;
+    }
+
+    .link-card {
+        padding: 12px 8px;
+        font-size: 1rem;
+    }
+
+    .footer-content {
+        flex-direction: column; 
+    }
+    
+    .footer-right, .footer-socials {
+        text-align: left !important;
+        justify-content: flex-start;
+    }
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+/* --- 8. Recents Feed Styles --- */
+.feed {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: left; 
+}
+
+.post-card {
+    background: var(--link-bg);
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+}
+
+.post-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.post-title {
+    font-size: 1.3rem;
+    margin: 0 !important;
+    color: var(--text-color);
+}
+
+.post-date {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 4px;
+}
+
+.post-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+    color: #444;
+}

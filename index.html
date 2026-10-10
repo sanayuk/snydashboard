@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown | sanayuk</title>
+    <link rel="icon" type="image/jpeg" href="snypfp.jpg">
+    <!-- Google Fonts: Lora -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=8">
+    <style>
+        * {
+            font-family: "Times New Roman", Times, serif;
+        }
+
+        /* Fixed Fullscreen Toggle Button */
+        .fullscreen-btn {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--link-bg, #ffffff);
+            border: 1px solid #ccc;
+            color: var(--text-color, #111);
+            padding: 5px 10px;
+            font-size: 0.78rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 3px;
+            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05);
+            transition: background 0.15s ease, border-color 0.15s ease;
+            z-index: 9999;
+        }
+
+        .fullscreen-btn:hover {
+            background: #f7f7f7;
+            border-color: #999;
+        }
+
+        /* Centered greeting in Lora */
+        .dashboard-greeting {
+            font-family: 'Lora', serif !important;
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 18px;
+            color: var(--text-color, #111);
+            text-align: center;
+            letter-spacing: -0.2px;
+        }
+
+        /* Flat Dashboard Info Bar */
+        .dashboard-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 18px 22px;
+            background: var(--link-bg, #ffffff);
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+
+        /* Clock aligned to the left */
+        .dashboard-clock {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            gap: 3px;
+        }
+
+        .live-date {
+            font-size: 0.85rem;
+            color: #777;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .live-time {
+            font-size: 1.9rem;
+            font-weight: normal;
+            color: var(--text-color, #000);
+            line-height: 1.1;
+            text-align: left;
+        }
+
+        .dashboard-weather {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 3px;
+        }
+
+        .weather-location {
+            font-size: 0.85rem;
+            color: #777;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .weather-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .weather-temp {
+            font-size: 1.9rem;
+            font-weight: normal;
+            color: var(--text-color, #000);
+            line-height: 1.1;
+        }
+
+        .weather-sub {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
+        .weather-condition {
+            font-size: 0.85rem;
+            color: var(--text-color, #111);
+            font-weight: normal;
+        }
+
+        .weather-humidity {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Dynamic DSE countdown banner */
+        .dashboard-reminder {
+            background: var(--link-bg, #ffffff);
+            border: 1px solid #ccc;
+            padding: 7px 14px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 0.88rem;
+            font-weight: normal;
+            color: var(--text-color, #111);
+            letter-spacing: 0.2px;
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.04);
+        }
+
+        /* Multi-Outlet News & Magazine Ticker Bar */
+        .news-ticker-container {
+            background: var(--link-bg, #ffffff);
+            border: 1px solid #ccc;
+            padding: 7px 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: hidden;
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.04);
+        }
+
+        .news-ticker-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #888;
+            padding-right: 12px;
+            border-right: 1px solid #ddd;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .news-ticker-track {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .news-ticker-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker-loop 120s linear infinite;
+            font-size: 0.88rem;
+            color: var(--text-color, #111);
+        }
+
+        .news-ticker-container:hover .news-ticker-content {
+            animation-play-state: paused;
+        }
+
+        @keyframes ticker-loop {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* 2-Column Blocks */
+        .dashboard-columns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        .dashboard-block {
+            background: var(--link-bg, #ffffff);
+            border: 1px solid #ccc;
+            padding: 16px 18px;
+            border-radius: 4px;
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .block-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: bold;
+            color: var(--text-color, #111);
+        }
+
+        .block-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .block-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* Lowercase item titles only */
+        .block-item-title {
+            font-size: 0.95rem;
+            color: var(--text-color, #111);
+            line-height: 1.25;
+            font-weight: normal;
+            text-transform: lowercase;
+        }
+
+        /* Dates, times, calendar tags, All Day, and Due preserve case */
+        .block-item-date {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Soft red highlight for items happening/due today */
+        .date-highlight-today {
+            color: #d25a5a !important;
+            font-weight: 600;
+        }
+
+        /* Soft warm yellow highlight for items happening/due tomorrow */
+        .date-highlight-tomorrow {
+            color: #c98a12 !important;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        /* Countdown Grid */
+        .countdown-feed {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .countdown-card {
+            background: var(--link-bg);
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .countdown-subject {
+            font-size: 1.05rem;
+            color: var(--text-color);
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .countdown-date {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .countdown-timer {
+            font-size: 1.2rem;
+            color: #000;
+            font-weight: normal;
+            margin-top: auto;
+        }
+
+        .good-luck {
+            color: var(--text-color);
+            font-weight: bold;
+            font-style: italic;
+            font-size: 1rem;
+        }
+
+        /* Mobile layout */
+        @media (max-width: 600px) {
+            .countdown-feed,
+            .dashboard-columns {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-greeting {
+                font-size: 1.6rem;
+            }
+            .dashboard-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .dashboard-weather {
+                align-items: flex-start;
+            }
+            .weather-sub {
+                align-items: flex-start;
+            }
+            .fullscreen-btn {
+                top: 10px;
+                right: 10px;
+                font-size: 0.72rem;
+                padding: 4px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fullscreen Toggle Button -->
+    <button class="fullscreen-btn" id="fullscreen-toggle" onclick="toggleFullScreen()">Fullscreen</button>
+
+    <div class="container" style="max-width: 700px; margin-top: 40px;">
+        <!-- Centered Greeting -->
+        <div class="dashboard-greeting" id="dashboard-greeting">Hello, sny</div>
+
+        <!-- Live Clock and HK Weather -->
+        <div class="dashboard-info">
+            <div class="dashboard-clock">
+                <span class="live-date" id="live-date">...</span>
+                <span class="live-time" id="live-time">--:--:--</span>
+            </div>
+            <div class="dashboard-weather">
+                <span class="weather-location">Hong Kong</span>
+                <div class="weather-stats">
+                    <span class="weather-temp" id="weather-temp">--°C</span>
+                    <div class="weather-sub">
+                        <span class="weather-condition" id="weather-condition">Loading...</span>
+                        <span class="weather-humidity" id="weather-humidity">--% RH</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic DSE Countdown Ticker Box -->
+        <div class="dashboard-reminder" id="dashboard-reminder">
+            <!-- Countdown injected via JS -->
+        </div>
+
+        <!-- News Ticker Aggregating Top Global Outlets, Tech & Magazines -->
+        <div class="news-ticker-container">
+            <span class="news-ticker-label">News</span>
+            <div class="news-ticker-track">
+                <span class="news-ticker-content" id="news-ticker-content">Syncing latest headlines...</span>
+            </div>
+        </div>
+
+        <!-- Calendar & Tasks Sync Blocks -->
+        <div class="dashboard-columns">
+            <div class="dashboard-block">
+                <div class="block-header">
+                    <span class="block-title">Calendar</span>
+                </div>
+                <ul class="block-list" id="calendar-list">
+                    <li class="empty-state">Syncing events...</li>
+                </ul>
+            </div>
+
+            <div class="dashboard-block">
+                <div class="block-header">
+                    <span class="block-title">Tasks</span>
+                </div>
+                <ul class="block-list" id="tasks-list">
+                    <li class="empty-state">Syncing tasks...</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="countdown-feed" id="countdown-container">
+            <!-- Countdowns injected via JS -->
+        </div>
+    </div> 
+
+    <script>
+        /* Fullscreen Toggle Handler */
+        function toggleFullScreen() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+        }
+
+        function updateFullscreenBtnLabel() {
+            const btn = document.getElementById("fullscreen-toggle");
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+                btn.textContent = "Exit Fullscreen";
+            } else {
+                btn.textContent = "Fullscreen";
+            }
+        }
+
+        document.addEventListener("fullscreenchange", updateFullscreenBtnLabel);
+        document.addEventListener("webkitfullscreenchange", updateFullscreenBtnLabel);
+
+        /* Google Apps Script Web App Endpoint */
+        const apiEndpoint = "https://script.google.com/macros/s/AKfycbwO_MoznmoiETjESpau21XC8IpJjxJbJMjKqn0088WEwFqqH2EtcpUzaPIgyYJnYuwK/exec";
+
+        /* DSE Start Date (Chinese Language Exam: April 8, 2027) */
+        const dseExamDate = new Date("2027-04-08T08:30:00").getTime();
+
+        /* Countdowns Dataset */
+        const exams = [
+            { dateStr: "2026/11/04 08:00", subject: "Standard Test", targetDate: new Date("2026-11-04T08:00:00").getTime() },
+            { dateStr: "2027/01/22 08:00", subject: "Mock Exam", targetDate: new Date("2027-01-22T08:00:00").getTime() },
+            { dateStr: "2027/03/01 17:00", subject: "English Language (4)", targetDate: new Date("2027-03-01T17:00:00").getTime() },
+            { dateStr: "2027/04/08 08:30", subject: "Chinese Language (1) & (2)", targetDate: new Date("2027-04-08T08:30:00").getTime() },
+            { dateStr: "2027/04/09 08:30", subject: "English Language (1) & (2)", targetDate: new Date("2027-04-09T08:30:00").getTime() },
+            { dateStr: "2027/04/10 09:15", subject: "English Language (3)", targetDate: new Date("2027-04-10T09:15:00").getTime() },
+            { dateStr: "2027/04/12 08:30", subject: "Mathematics (1) & (2)", targetDate: new Date("2027-04-12T08:30:00").getTime() },
+            { dateStr: "2027/04/13 08:30", subject: "Citizenship and Social Development", targetDate: new Date("2027-04-13T08:30:00").getTime() },
+            { dateStr: "2027/04/17 08:30", subject: "ICT (1) & (2)", targetDate: new Date("2027-04-17T08:30:00").getTime() },
+            { dateStr: "2027/04/22 08:30", subject: "Economics (1) & (2)", targetDate: new Date("2027-04-22T08:30:00").getTime() }
+        ];
+
+        /* Time, Greeting, Date & DSE Countdown Box */
+        function updateClockAndGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+
+            // Greeting Logic
+            let greetingText = "Goodnight";
+            if (hour >= 4 && hour < 12) {
+                greetingText = "Good Morning";
+            } else if (hour >= 12 && hour < 18) {
+                greetingText = "Good Afternoon";
+            } else if (hour >= 18 && hour < 22) {
+                greetingText = "Good Evening";
+            }
+            document.getElementById("dashboard-greeting").textContent = `${greetingText}, sny`;
+
+            // Date format: Tuesday, January 10, 2026
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById("live-date").textContent = now.toLocaleDateString('en-US', dateOptions);
+
+            // Live Clock
+            const hoursStr = String(hour).padStart(2, '0');
+            const minutesStr = String(minute).padStart(2, '0');
+            const secondsStr = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById("live-time").textContent = `${hoursStr}:${minutesStr}:${secondsStr}`;
+
+            // Seconds remaining until tomorrow (next midnight)
+            const tomorrowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
+            const secondsUntilTomorrow = Math.floor((tomorrowMidnight - now.getTime()) / 1000);
+            const tomorrowSuffix = ` · ${secondsUntilTomorrow}s until tomorrow`;
+
+            // Reminder Box: 18:30 - 19:15 cat feeding, otherwise [day] days until DSE, lock in!
+            const totalMinutes = hour * 60 + minute;
+            const reminderEl = document.getElementById("dashboard-reminder");
+
+            let mainMessage = "";
+            if (totalMinutes >= (18 * 60 + 30) && totalMinutes <= (19 * 60 + 15)) {
+                mainMessage = "Remember to feed cats";
+            } else {
+                const nowMs = now.getTime();
+                const distance = dseExamDate - nowMs;
+
+                if (distance <= 0) {
+                    mainMessage = "DSE has begun, lock in!";
+                } else {
+                    const days = Math.ceil(distance / (1000 * 60 * 60 * 24));
+                    mainMessage = `${days} days until DSE, lock in!`;
+                }
+            }
+
+            reminderEl.textContent = `${mainMessage}${tomorrowSuffix}`;
+        }
+        setInterval(updateClockAndGreeting, 1000);
+        updateClockAndGreeting();
+
+        /* Robust cross-browser parser for publication dates */
+        function parsePubDate(dateStr) {
+            if (!dateStr) return 0;
+            const trimmed = String(dateStr).trim();
+
+            let ts = Date.parse(trimmed);
+            if (!isNaN(ts)) return ts;
+
+            if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(trimmed)) {
+                ts = Date.parse(trimmed.replace(' ', 'T') + 'Z');
+                if (!isNaN(ts)) return ts;
+            }
+
+            ts = Date.parse(trimmed.replace(/-/g, '/'));
+            if (!isNaN(ts)) return ts;
+
+            const d = new Date(trimmed);
+            return isNaN(d.getTime()) ? 0 : d.getTime();
+        }
+
+        /* News Ticker Rendering Engine (Deterministic Newest First, Seamless Loop) */
+        let activeArticlesMap = new Map();
+
+        function renderTicker() {
+            const tickerEl = document.getElementById("news-ticker-content");
+            const allArticles = Array.from(activeArticlesMap.values());
+            if (allArticles.length === 0) return;
+
+            // Sort strictly newest first
+            allArticles.sort((a, b) => b.timestamp - a.timestamp);
+
+            const headlines = allArticles.map(item => `[${item.source}] ${item.title}`);
+            const stream = headlines.join("   —   ") + "   —   ";
+
+            if (tickerEl.getAttribute("data-content") !== stream) {
+                tickerEl.setAttribute("data-content", stream);
+                // Duplicate stream only when there is enough substance for an unrepeated smooth loop
+                tickerEl.textContent = headlines.length >= 8 ? (stream + stream) : stream;
+
+                const duration = Math.max(75, Math.round(headlines.length * 3.5));
+                tickerEl.style.animationDuration = `${duration}s`;
+            }
+        }
+
+        /* Fetch single feed with 8s realistic timeout and cache-busting */
+        async function fetchFeedSafe(src) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+            // 5-minute cache buster to bypass proxy cache and retrieve new headlines
+            const cacheBuster = Math.floor(Date.now() / 300000);
+
+            try {
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}&_cb=${cacheBuster}`, {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                const data = await res.json();
+                if (data.status === "ok" && Array.isArray(data.items) && data.items.length > 0) {
+                    return data.items.map(item => ({
+                        source: src.name,
+                        title: item.title ? item.title.trim() : "",
+                        timestamp: parsePubDate(item.pubDate),
+                        isMagazine: !!src.isMagazine
+                    })).filter(item => item.title.length > 0);
+                }
+            } catch (err) {
+                // Silently skip failed feeds
+            }
+            return [];
+        }
+
+        /* Multi-Outlet News & Magazine Dataset */
+        const newsSources = [
+            // Hong Kong Independent & Civic Media
+            { name: "獨立媒體", url: "https://www.inmediahk.net/rss.xml" },
+            { name: "集誌社", url: "https://thecollectivehk.com/feed/" },
+            { name: "法庭線", url: "https://thewitnesshk.com/feed/" },
+            { name: "端傳媒", url: "https://theinitium.com/newsfeed/" },
+            { name: "ReNews", url: "https://news.google.com/rss/search?q=when:48h+ReNews+香港&hl=zh-HK&gl=HK&ceid=HK:zh-Hant" },
+            { name: "Pulse HK", url: "https://pulsehknews.com/feed/" },
+            { name: "棱角 The Points", url: "https://points-media.com/feed/" },
+            { name: "綠豆 Green Bean", url: "https://greenbean.media/feed/" },
+
+            // Hong Kong Mainstream Media
+            { name: "Now 新聞", url: "https://news.now.com/rss/news_local.xml" },
+            { name: "明報", url: "https://news.mingpao.com/rss/ins/all.xml" },
+            { name: "RTHK", url: "https://rthk9.rthk.hk/rthk/news/rss/c_expressnews.xml" },
+            { name: "HKET", url: "https://www.hket.com/rss/hongkong" },
+            { name: "信報 HKEJ", url: "https://www.hkej.com/rss/onlinenews.xml" },
+            { name: "The Standard", url: "https://www.thestandard.com.hk/newsfeed/latest/cms_express.xml" },
+            { name: "SCMP", url: "https://www.scmp.com/rss/91/feed" },
+            { name: "HKFP", url: "https://hongkongfp.com/feed/" },
+            { name: "Yahoo 新聞", url: "https://hk.news.yahoo.com/rss/hong-kong" },
+
+            // Taiwan Regional & Investigative Media
+            { name: "中央社 CNA", url: "https://feeds.feedburner.com/cnaFirstNews" },
+            { name: "公視 PTS", url: "https://news.pts.org.tw/xml/newsfeed.xml" },
+            { name: "報導者", url: "https://www.twreporter.org/a/rss2.xml" },
+            { name: "ETtoday", url: "https://feeds.feedburner.com/ettoday/realtime" },
+            { name: "Taipei Times", url: "https://www.taipeitimes.com/xml/index.rss" },
+
+            // Tech & Gadgets
+            { name: "The Verge", url: "https://www.theverge.com/rss/index.xml" },
+            { name: "WIRED", url: "https://www.wired.com/feed/rss" },
+            { name: "unwire.hk", url: "https://unwire.hk/feed/" },
+            { name: "DCFever", url: "https://www.dcfever.com/news/rss.php" },
+
+            // Magazines, Fashion, Menswear & Street Style (isMagazine: true allows up to 72h / latest fallback)
+            { name: "Vogue HK", url: "https://www.voguehk.com/zh/feed/", isMagazine: true },
+            { name: "ELLE HK", url: "https://www.elle.com.hk/rss", isMagazine: true },
+            { name: "Harper's BAZAAR HK", url: "https://www.harpersbazaar.com.hk/rss", isMagazine: true },
+            { name: "Cosmopolitan HK", url: "https://www.cosmopolitan.com.hk/rss", isMagazine: true },
+            { name: "Marie Claire HK", url: "https://marieclaire.com.hk/feed/", isMagazine: true },
+            { name: "Hypebeast HK", url: "https://hypebeast.com/hk/feed", isMagazine: true },
+            { name: "Esquire HK", url: "https://www.esquirehk.com/rss", isMagazine: true },
+            { name: "Vogue Taiwan", url: "https://www.vogue.com.tw/feed", isMagazine: true },
+            { name: "ELLE Taiwan", url: "https://www.elle.com/tw/rss/all.xml", isMagazine: true },
+            { name: "Harper's BAZAAR TW", url: "https://www.harpersbazaar.com/tw/rss/all.xml", isMagazine: true },
+            { name: "Marie Claire Taiwan", url: "https://www.marieclaire.com.tw/feed", isMagazine: true },
+            { name: "GQ Taiwan", url: "https://www.gq.com.tw/feed", isMagazine: true },
+            { name: "JUKSY 街星", url: "https://www.juksy.com/rss.xml", isMagazine: true },
+            { name: "HEAVEN RAVEN", url: "https://heavenraven.com/feed/", isMagazine: true },
+            { name: "Vogue Business", url: "https://www.voguebusiness.com/feed", isMagazine: true },
+            { name: "GQ", url: "https://www.gq.com/feed/rss", isMagazine: true },
+            { name: "Esquire", url: "https://www.esquire.com/rss/all.xml", isMagazine: true },
+            { name: "Hypebeast", url: "https://hypebeast.com/feed", isMagazine: true },
+            { name: "TIME", url: "https://time.com/feed/", isMagazine: true },
+            { name: "The New Yorker", url: "https://www.newyorker.com/feed/everything", isMagazine: true },
+            { name: "The Atlantic", url: "https://www.theatlantic.com/feed/all/", isMagazine: true },
+            { name: "Fortune", url: "https://fortune.com/feed/", isMagazine: true },
+
+            // Global Wires & Financial Press
+            { name: "BBC", url: "https://feeds.bbci.co.uk/news/world/rss.xml" },
+            { name: "The Guardian", url: "https://www.theguardian.com/world/rss" },
+            { name: "NYT", url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml" },
+            { name: "Financial Times", url: "https://www.ft.com/world?format=rss" },
+            { name: "Nikkei Asia", url: "https://asia.nikkei.com/rss/Feed/NAR/asia" },
+            { name: "Euronews", url: "https://www.euronews.com/rss?format=mrss&level=vertical&name=news" },
+            { name: "CBC", url: "https://www.cbc.ca/cmlink/rss-world" },
+            { name: "RFA", url: "https://www.rfa.org/english/RSS" }
+        ];
+
+        /* Ingest News progressively in controlled non-blocking batches */
+        let isFetchingNews = false;
+        async function fetchAllNews() {
+            if (isFetchingNews) return;
+            isFetchingNews = true;
+
+            const nowTime = Date.now();
+            const twentyFourHoursAgo = nowTime - (24 * 60 * 60 * 1000);
+            const seventyTwoHoursAgo = nowTime - (72 * 60 * 60 * 1000);
+
+            // Process in gentle batches of 4 to prevent 429 burst limits
+            for (let i = 0; i < newsSources.length; i += 4) {
+                const batch = newsSources.slice(i, i + 4);
+                const results = await Promise.allSettled(batch.map(src => fetchFeedSafe(src)));
+
+                results.forEach((res, idx) => {
+                    if (res.status === "fulfilled" && Array.isArray(res.value) && res.value.length > 0) {
+                        const src = batch[idx];
+                        
+                        // Strict 24h filter for news; 72h window for magazines/culture
+                        let valid = res.value.filter(item => {
+                            if (item.timestamp === 0) return true;
+                            if (item.isMagazine) return item.timestamp >= seventyTwoHoursAgo;
+                            return item.timestamp >= twentyFourHoursAgo;
+                        });
+
+                        // Fallback: If magazine published nothing in 72h, take its newest 1-2 articles so it isn't lost
+                        if (valid.length === 0 && src.isMagazine) {
+                            valid = res.value.slice(0, 2);
+                        }
+
+                        valid.forEach(item => {
+                            // Normalize text to eliminate cross-outlet duplicates
+                            const normKey = item.title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, "").slice(0, 32);
+                            if (normKey.length > 4 && !activeArticlesMap.has(normKey)) {
+                                activeArticlesMap.set(normKey, item);
+                            }
+                        });
+                    }
+                });
+
+                // Update ticker progressively as each batch returns
+                renderTicker();
+            }
+
+            isFetchingNews = false;
+        }
+
+        // Fetch on load, then poll in background every 3 minutes
+        fetchAllNews();
+        setInterval(fetchAllNews, 180000);
+
+        /* HK Weather */
+        const hkoWeatherIcons = {
+            50: "Sunny",
+            51: "Sunny Periods",
+            52: "Sunny Intervals",
+            53: "Sunny Periods with Showers",
+            54: "Sunny Intervals with Showers",
+            60: "Cloudy",
+            61: "Overcast",
+            62: "Light Rain",
+            63: "Rain",
+            64: "Heavy Rain",
+            65: "Thunderstorms",
+            70: "Fine",
+            71: "Fine",
+            72: "Fine",
+            73: "Fine",
+            74: "Fine",
+            75: "Fine",
+            76: "Partly Cloudy",
+            77: "Mainly Cloudy",
+            80: "Windy",
+            81: "Dry",
+            82: "Humid",
+            83: "Fog",
+            84: "Mist",
+            85: "Haze",
+            90: "Hot",
+            91: "Cold",
+            92: "Very Hot",
+            93: "Very Cold"
+        };
+
+        const wmoWeatherCodes = {
+            0: "Sunny",
+            1: "Mainly Clear",
+            2: "Partly Cloudy",
+            3: "Overcast",
+            45: "Fog",
+            48: "Fog",
+            51: "Light Drizzle",
+            53: "Drizzle",
+            55: "Dense Drizzle",
+            61: "Light Rain",
+            63: "Moderate Rain",
+            65: "Heavy Rain",
+            80: "Showers",
+            81: "Heavy Showers",
+            82: "Violent Showers",
+            95: "Thunderstorm"
+        };
+
+        async function fetchHKWeather() {
+            try {
+                const response = await fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en");
+                if (!response.ok) throw new Error("HKO request failed");
+                const data = await response.json();
+
+                const hkoStation = data.temperature.data.find(item => item.place === "Hong Kong Observatory") || data.temperature.data[0];
+                const temp = hkoStation ? hkoStation.value : "--";
+                const humidity = (data.humidity && data.humidity.data.length > 0) ? data.humidity.data[0].value : "--";
+                
+                let condition = "Fair";
+                if (data.icon && data.icon.length > 0) {
+                    condition = hkoWeatherIcons[data.icon[0]] || "Fair";
+                }
+
+                document.getElementById("weather-temp").textContent = `${temp}°C`;
+                document.getElementById("weather-condition").textContent = condition;
+                document.getElementById("weather-humidity").textContent = `${humidity}% RH`;
+            } catch (err) {
+                try {
+                    const fallbackRes = await fetch("https://api.open-meteo.com/v1/forecast?latitude=22.3193&longitude=114.1694&current=temperature_2m,relative_humidity_2m,weather_code");
+                    const fbData = await fallbackRes.json();
+                    const code = fbData.current.weather_code;
+                    const condition = wmoWeatherCodes[code] || "Fair";
+
+                    document.getElementById("weather-temp").textContent = `${Math.round(fbData.current.temperature_2m)}°C`;
+                    document.getElementById("weather-condition").textContent = condition;
+                    document.getElementById("weather-humidity").textContent = `${fbData.current.relative_humidity_2m}% RH`;
+                } catch (fallbackErr) {
+                    document.getElementById("weather-temp").textContent = "--°C";
+                    document.getElementById("weather-condition").textContent = "--";
+                    document.getElementById("weather-humidity").textContent = "N/A";
+                }
+            }
+        }
+        fetchHKWeather();
+        setInterval(fetchHKWeather, 600000);
+
+        /* Helper to check if a date is today (soft red) or tomorrow (soft yellow) */
+        function getDateHighlightClass(dateStr) {
+            if (!dateStr) return "";
+
+            const lower = dateStr.toLowerCase();
+            if (lower.includes("today")) return "date-highlight-today";
+            if (lower.includes("tomorrow")) return "date-highlight-tomorrow";
+
+            let clean = dateStr.replace(/^due\s+/i, '').split(' · ')[0].trim();
+            const parsed = new Date(clean);
+            if (isNaN(parsed.getTime())) return "";
+
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            const target = new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+
+            if (target.getTime() === today.getTime()) {
+                return "date-highlight-today";
+            } else if (target.getTime() === tomorrow.getTime()) {
+                return "date-highlight-tomorrow";
+            }
+            return "";
+        }
+
+        /* Automatic Backend Fetching (Calendar & Tasks Every 1 Second) */
+        let isFetching = false;
+        async function fetchLiveDashboardData() {
+            if (isFetching) return;
+            isFetching = true;
+
+            try {
+                const response = await fetch(apiEndpoint);
+                const liveData = await response.json();
+                
+                // Calendar List: lowercases item title; capitalises "All Day"; preserves date, time, and calendar casing
+                const calList = document.getElementById("calendar-list");
+                calList.innerHTML = "";
+                if (liveData.events && liveData.events.length > 0) {
+                    liveData.events.forEach(evt => {
+                        const titleLower = String(evt.title || "").toLowerCase();
+                        let dateDisplay = String(evt.date || "");
+                        
+                        dateDisplay = dateDisplay.replace(/all day/gi, "All Day");
+
+                        if (evt.calendar) {
+                            dateDisplay += ` · ${evt.calendar}`;
+                        }
+
+                        const highlight = getDateHighlightClass(evt.date);
+                        calList.innerHTML += `
+                            <li class="block-item">
+                                <div class="block-item-title">${titleLower}</div>
+                                <div class="block-item-date ${highlight}">${dateDisplay}</div>
+                            </li>`;
+                    });
+                } else {
+                    calList.innerHTML = `<li class="empty-state">No upcoming events</li>`;
+                }
+
+                // Tasks List: lowercases item title; capitalises "Due"; preserves date casing
+                const tskList = document.getElementById("tasks-list");
+                tskList.innerHTML = "";
+                if (liveData.tasks && liveData.tasks.length > 0) {
+                    liveData.tasks.forEach(task => {
+                        const titleLower = String(task.title || "").toLowerCase();
+                        let dateDisplay = String(task.date || "No due date");
+                        
+                        dateDisplay = dateDisplay.replace(/\bdue\b/gi, "Due");
+
+                        const highlight = getDateHighlightClass(task.date);
+
+                        tskList.innerHTML += `
+                            <li class="block-item">
+                                <div class="block-item-title">${titleLower}</div>
+                                <div class="block-item-date ${highlight}">${dateDisplay}</div>
+                            </li>`;
+                    });
+                } else {
+                    tskList.innerHTML = `<li class="empty-state">No upcoming tasks</li>`;
+                }
+            } catch (e) {
+                console.error("Failed to load backend API data:", e);
+            } finally {
+                isFetching = false;
+            }
+        }
+
+        fetchLiveDashboardData();
+        setInterval(fetchLiveDashboardData, 1000);
+
+        /* Countdown Cards Feed */
+        const container = document.getElementById("countdown-container");
+
+        exams.forEach((exam, index) => {
+            const card = document.createElement("div");
+            card.className = "countdown-card";
+            card.innerHTML = `
+                <div>
+                    <div class="countdown-subject">${exam.subject}</div>
+                    <div class="countdown-date">${exam.dateStr}</div>
+                </div>
+                <div class="countdown-timer" id="timer-${index}">...</div>
+            `;
+            container.appendChild(card);
+        });
+
+        function updateCountdowns() {
+            const now = new Date().getTime();
+
+            exams.forEach((exam, index) => {
+                const timerEl = document.getElementById(`timer-${index}`);
+                const distance = exam.targetDate - now;
+
+                if (distance <= 0) {
+                    timerEl.innerHTML = "<span class='good-luck'>good luck!</span>";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                timerEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            });
+        }
+
+        setInterval(updateCountdowns, 1000);
+        updateCountdowns(); 
+    </script>
+</body>
+</html>
