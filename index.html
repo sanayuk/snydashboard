@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown | sanayuk</title>
+    <title>sanayuk's dashboard</title>
     <link rel="icon" type="image/jpeg" href="snypfp.jpg">
     <!-- Google Fonts: Lora -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,31 +12,15 @@
     <link rel="stylesheet" href="style.css?v=8">
     <style>
         * {
+            box-sizing: border-box;
             font-family: "Times New Roman", Times, serif;
         }
 
-        /* Fixed Fullscreen Toggle Button */
-        .fullscreen-btn {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            background: var(--link-bg, #ffffff);
-            border: 1px solid #ccc;
-            color: var(--text-color, #111);
-            padding: 5px 10px;
-            font-size: 0.78rem;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 3px;
-            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05);
-            transition: background 0.15s ease, border-color 0.15s ease;
-            z-index: 9999;
-        }
-
-        .fullscreen-btn:hover {
-            background: #f7f7f7;
-            border-color: #999;
+        .container {
+            width: 100%;
+            max-width: 700px;
+            margin: 40px auto 30px auto;
+            padding: 0 14px;
         }
 
         /* Centered greeting in Lora */
@@ -50,13 +34,14 @@
             letter-spacing: -0.2px;
         }
 
-        /* Flat Dashboard Info Bar */
+        /* Flat Dashboard Info Bar (Retains 2-side desktop split across all devices) */
         .dashboard-info {
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
+            flex-wrap: nowrap;
+            gap: 12px;
             padding: 18px 22px;
             background: var(--link-bg, #ffffff);
             border: 1px solid #ccc;
@@ -70,6 +55,7 @@
             align-items: flex-start;
             text-align: left;
             gap: 3px;
+            flex-shrink: 0;
         }
 
         .live-date {
@@ -88,11 +74,14 @@
             text-align: left;
         }
 
+        /* Weather aligned to the right */
         .dashboard-weather {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
+            text-align: right;
             gap: 3px;
+            flex-shrink: 0;
         }
 
         .weather-location {
@@ -200,7 +189,7 @@
             }
         }
 
-        /* 2-Column Blocks */
+        /* 2-Column Blocks (Preserved on all screen sizes) */
         .dashboard-columns {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -252,7 +241,6 @@
             gap: 2px;
         }
 
-        /* Lowercase item titles only */
         .block-item-title {
             font-size: 0.95rem;
             color: var(--text-color, #111);
@@ -261,19 +249,16 @@
             text-transform: lowercase;
         }
 
-        /* Dates, times, calendar tags, All Day, and Due preserve case */
         .block-item-date {
             font-size: 0.8rem;
             color: #888;
         }
 
-        /* Soft red highlight for items happening/due today */
         .date-highlight-today {
             color: #d25a5a !important;
             font-weight: 600;
         }
 
-        /* Soft warm yellow highlight for items happening/due tomorrow */
         .date-highlight-tomorrow {
             color: #c98a12 !important;
             font-weight: 600;
@@ -285,7 +270,7 @@
             font-size: 0.9rem;
         }
 
-        /* Countdown Grid */
+        /* 2-Column Countdown Grid (Preserved on all screen sizes) */
         .countdown-feed {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -332,44 +317,99 @@
             font-size: 1rem;
         }
 
-        /* Mobile layout */
+        /* Fullscreen Toggle Button at Bottom of Page */
+        .fullscreen-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        .fullscreen-btn {
+            background: var(--link-bg, #ffffff);
+            border: 1px solid #ccc;
+            color: var(--text-color, #111);
+            padding: 6px 14px;
+            font-size: 0.78rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 3px;
+            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05);
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background: #f7f7f7;
+            border-color: #999;
+        }
+
+        /* Proportional Scaling for Mobile Devices */
         @media (max-width: 600px) {
-            .countdown-feed,
-            .dashboard-columns {
-                grid-template-columns: 1fr;
+            .container {
+                margin-top: 28px !important;
+                padding: 0 10px;
             }
             .dashboard-greeting {
-                font-size: 1.6rem;
+                font-size: 1.7rem;
+                margin-bottom: 14px;
             }
             .dashboard-info {
-                flex-direction: column;
-                align-items: flex-start;
+                padding: 12px 14px;
+                gap: 6px;
             }
-            .dashboard-weather {
-                align-items: flex-start;
+            .live-date,
+            .weather-location {
+                font-size: 0.75rem;
             }
-            .weather-sub {
-                align-items: flex-start;
+            .live-time,
+            .weather-temp {
+                font-size: 1.45rem;
+            }
+            .weather-stats {
+                gap: 8px;
+            }
+            .weather-condition,
+            .weather-humidity {
+                font-size: 0.78rem;
+            }
+            .dashboard-columns,
+            .countdown-feed {
+                gap: 10px;
+            }
+            .dashboard-block,
+            .countdown-card {
+                padding: 12px 12px;
+            }
+            .block-item-title {
+                font-size: 0.88rem;
+            }
+            .block-item-date {
+                font-size: 0.76rem;
+            }
+            .countdown-subject {
+                font-size: 0.95rem;
+            }
+            .countdown-date {
+                font-size: 0.78rem;
+            }
+            .countdown-timer {
+                font-size: 1.05rem;
             }
             .fullscreen-btn {
-                top: 10px;
-                right: 10px;
                 font-size: 0.72rem;
-                padding: 4px 8px;
+                padding: 5px 12px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Fullscreen Toggle Button -->
-    <button class="fullscreen-btn" id="fullscreen-toggle" onclick="toggleFullScreen()">Fullscreen</button>
-
-    <div class="container" style="max-width: 700px; margin-top: 40px;">
+    <div class="container">
         <!-- Centered Greeting -->
         <div class="dashboard-greeting" id="dashboard-greeting">Hello, sny</div>
 
-        <!-- Live Clock and HK Weather -->
+        <!-- Live Clock (Left) and HK Weather (Right) -->
         <div class="dashboard-info">
             <div class="dashboard-clock">
                 <span class="live-date" id="live-date">...</span>
@@ -400,7 +440,7 @@
             </div>
         </div>
 
-        <!-- Calendar & Tasks Sync Blocks -->
+        <!-- Calendar & Tasks Sync Blocks (Side-by-Side 2 Columns) -->
         <div class="dashboard-columns">
             <div class="dashboard-block">
                 <div class="block-header">
@@ -421,8 +461,14 @@
             </div>
         </div>
         
+        <!-- Countdown Grid (Side-by-Side 2 Columns) -->
         <div class="countdown-feed" id="countdown-container">
             <!-- Countdowns injected via JS -->
+        </div>
+
+        <!-- Fullscreen Button Placed at Bottom of Page -->
+        <div class="fullscreen-container">
+            <button class="fullscreen-btn" id="fullscreen-toggle" onclick="toggleFullScreen()">Fullscreen</button>
         </div>
     </div> 
 
@@ -493,7 +539,7 @@
             }
             document.getElementById("dashboard-greeting").textContent = `${greetingText}, sny`;
 
-            // Date format: Tuesday, January 10, 2026
+            // Date format: Saturday, October 10, 2026
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById("live-date").textContent = now.toLocaleDateString('en-US', dateOptions);
 
@@ -503,7 +549,7 @@
             const secondsStr = String(now.getSeconds()).padStart(2, '0');
             document.getElementById("live-time").textContent = `${hoursStr}:${minutesStr}:${secondsStr}`;
 
-            // Seconds remaining until tomorrow (next midnight)
+            // Seconds remaining until tomorrow
             const tomorrowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
             const secondsUntilTomorrow = Math.floor((tomorrowMidnight - now.getTime()) / 1000);
             const tomorrowSuffix = ` · ${secondsUntilTomorrow}s until tomorrow`;
@@ -552,7 +598,7 @@
             return isNaN(d.getTime()) ? 0 : d.getTime();
         }
 
-        /* News Ticker Rendering Engine (Deterministic Newest First, Seamless Loop) */
+        /* News Ticker Rendering Engine (Strictly Newest First, Seamless Loop) */
         let activeArticlesMap = new Map();
 
         function renderTicker() {
@@ -568,7 +614,6 @@
 
             if (tickerEl.getAttribute("data-content") !== stream) {
                 tickerEl.setAttribute("data-content", stream);
-                // Duplicate stream only when there is enough substance for an unrepeated smooth loop
                 tickerEl.textContent = headlines.length >= 8 ? (stream + stream) : stream;
 
                 const duration = Math.max(75, Math.round(headlines.length * 3.5));
@@ -580,8 +625,6 @@
         async function fetchFeedSafe(src) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-            // 5-minute cache buster to bypass proxy cache and retrieve new headlines
             const cacheBuster = Math.floor(Date.now() / 300000);
 
             try {
@@ -640,7 +683,7 @@
             { name: "unwire.hk", url: "https://unwire.hk/feed/" },
             { name: "DCFever", url: "https://www.dcfever.com/news/rss.php" },
 
-            // Magazines, Fashion, Menswear & Street Style (isMagazine: true allows up to 72h / latest fallback)
+            // Magazines, Fashion, Menswear & Street Style (isMagazine: allows 72h / latest fallback)
             { name: "Vogue HK", url: "https://www.voguehk.com/zh/feed/", isMagazine: true },
             { name: "ELLE HK", url: "https://www.elle.com.hk/rss", isMagazine: true },
             { name: "Harper's BAZAAR HK", url: "https://www.harpersbazaar.com.hk/rss", isMagazine: true },
@@ -675,7 +718,7 @@
             { name: "RFA", url: "https://www.rfa.org/english/RSS" }
         ];
 
-        /* Ingest News progressively in controlled non-blocking batches */
+        /* Ingest News progressively in controlled batches */
         let isFetchingNews = false;
         async function fetchAllNews() {
             if (isFetchingNews) return;
@@ -685,7 +728,6 @@
             const twentyFourHoursAgo = nowTime - (24 * 60 * 60 * 1000);
             const seventyTwoHoursAgo = nowTime - (72 * 60 * 60 * 1000);
 
-            // Process in gentle batches of 4 to prevent 429 burst limits
             for (let i = 0; i < newsSources.length; i += 4) {
                 const batch = newsSources.slice(i, i + 4);
                 const results = await Promise.allSettled(batch.map(src => fetchFeedSafe(src)));
@@ -694,20 +736,17 @@
                     if (res.status === "fulfilled" && Array.isArray(res.value) && res.value.length > 0) {
                         const src = batch[idx];
                         
-                        // Strict 24h filter for news; 72h window for magazines/culture
                         let valid = res.value.filter(item => {
                             if (item.timestamp === 0) return true;
                             if (item.isMagazine) return item.timestamp >= seventyTwoHoursAgo;
                             return item.timestamp >= twentyFourHoursAgo;
                         });
 
-                        // Fallback: If magazine published nothing in 72h, take its newest 1-2 articles so it isn't lost
                         if (valid.length === 0 && src.isMagazine) {
                             valid = res.value.slice(0, 2);
                         }
 
                         valid.forEach(item => {
-                            // Normalize text to eliminate cross-outlet duplicates
                             const normKey = item.title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, "").slice(0, 32);
                             if (normKey.length > 4 && !activeArticlesMap.has(normKey)) {
                                 activeArticlesMap.set(normKey, item);
@@ -716,14 +755,13 @@
                     }
                 });
 
-                // Update ticker progressively as each batch returns
                 renderTicker();
             }
 
             isFetchingNews = false;
         }
 
-        // Fetch on load, then poll in background every 3 minutes
+        // Fetch on load, poll in background every 3 minutes
         fetchAllNews();
         setInterval(fetchAllNews, 180000);
 
@@ -852,7 +890,7 @@
                 const response = await fetch(apiEndpoint);
                 const liveData = await response.json();
                 
-                // Calendar List: lowercases item title; capitalises "All Day"; preserves date, time, and calendar casing
+                // Calendar List: lowercases title, capitalises "All Day", preserves other cases
                 const calList = document.getElementById("calendar-list");
                 calList.innerHTML = "";
                 if (liveData.events && liveData.events.length > 0) {
@@ -877,7 +915,7 @@
                     calList.innerHTML = `<li class="empty-state">No upcoming events</li>`;
                 }
 
-                // Tasks List: lowercases item title; capitalises "Due"; preserves date casing
+                // Tasks List: lowercases title, capitalises "Due", preserves other cases
                 const tskList = document.getElementById("tasks-list");
                 tskList.innerHTML = "";
                 if (liveData.tasks && liveData.tasks.length > 0) {
